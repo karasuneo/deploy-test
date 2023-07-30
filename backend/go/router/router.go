@@ -30,5 +30,5 @@ func Init() {
 	// 部屋からの退室
 	r.DELETE("/api/room/member/:memberId", controller.DeletExitMemberData)
 
-	r.Run("35.77.100.160:8080")
+	r.Run("localhost:8080")
 }
