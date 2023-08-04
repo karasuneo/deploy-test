@@ -1,0 +1,33 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:latest
+    container_name: Wisdom_Tree_DB
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysqld_charset.cnf:/etc/mysql/conf.d/mysql_charset.cnf
+      - ./init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wisdomtree
+      MYSQL_USER: geek_camp
+      MYSQL_PASSWORD: geek_camp_pass
+
+  python:
+    container_name: Wisdom_Tree_DB_Python
+    restart: always
+    build: ./Docker/python
+    env_file:
+      - ../.env
+    # pythonフォルダを作成　（cd python　＋ mkdir と同義）
+    working_dir: "/server/"
+    tty: true
+    # docker-composeから見たsrcファイルをDocker内の仮想環境（pythonファイル）で読み込ませる
+    volumes:
+      - ../server:/server
+    ports:
+      - 80:8000
+    depends_on:
+      - mysql
